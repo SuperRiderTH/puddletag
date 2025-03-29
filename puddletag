@@ -55,7 +55,7 @@ def _migrate_action_shortcut_filenames():
     with open(filename, 'r') as fo:
         data = json.loads(fo.read())
 
-    old_dir = os.path.join(os.getenv('HOME'), '.puddletag', 'actions')
+    old_dir = os.path.join(os.path.expanduser("~"), '.puddletag', 'actions')
     for key, shortcut in data.items():
         shortcut['filenames'] = [z.replace(old_dir, ACTIONDIR) for z in shortcut['filenames']]
 
@@ -69,7 +69,7 @@ def migrate_settings():
         if not os.path.exists(dirpath):
             os.makedirs(dirpath)
 
-    old_dir = os.path.join(os.getenv('HOME'), '.puddletag')
+    old_dir = os.path.join(os.path.expanduser("~"), '.puddletag')
     if (os.path.exists(old_dir)):
         dirnames = [
             'plugins', 'actions', 'masstagging', 'mp3tag_sources', 'translations']

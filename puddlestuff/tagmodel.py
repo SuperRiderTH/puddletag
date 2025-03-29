@@ -1,4 +1,5 @@
 import os
+import platform
 import re
 import sys
 import time
@@ -46,6 +47,8 @@ def _default_audio_player():
         return 'xdg-open'
     elif sys.platform == "darwin":
         return 'open -a iTunes'
+    elif sys.platform == "Windows":
+        return 'Windows'
     return "clementine -p"
 
 
@@ -1721,7 +1724,7 @@ class TagTable(QTableView):
             self.model().moveRows(mime.draggedRows, row)
             self.restoreSelection()
         else:
-            filenames = [z.path() for z
+            filenames = [z.toLocalFile() for z
                          in event.mimeData().urls()]
 
             dirs = []
@@ -2039,6 +2042,13 @@ class TagTable(QTableView):
 
     def playFiles(self):
         """Play the selected files using the player specified in self.playcommand"""
+
+        # If we are running on Windows, just tell Windows to open the file and get out.
+        if platform.system() == "Windows":
+            fileToOpen = [z.filepath for z in self.selectedTags][0]
+            os.startfile(fileToOpen)
+            return
+
         if not self.selectedRows: return
         if hasattr(self, "playcommand"):
 

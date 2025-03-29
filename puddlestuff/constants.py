@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import platform
 import sys
 from os.path import dirname, join
 
@@ -48,16 +49,25 @@ FS_ENC = sys.getfilesystemencoding()
 PROGDIR = dirname(dirname(__file__))
 DATADIR = join(dirname(__file__), 'data')
 
-_config_dir = os.environ.get('XDG_CONFIG_HOME', os.path.join(os.path.expanduser("~"), '.config'))
-CONFIGDIR = os.path.join(_config_dir, 'puddletag')
+if platform.system() == "Windows":
+    _config_dir = os.environ.get('LOCALAPPDATA', os.path.join(os.path.expanduser("~"), 'AppData/Local'))
+    CONFIGDIR = os.path.join(_config_dir, 'puddletag/config')
+else:
+    _config_dir = os.environ.get('XDG_CONFIG_HOME', os.path.join(os.path.expanduser("~"), '.config'))
+    CONFIGDIR = os.path.join(_config_dir, 'puddletag')
+
 HOMEDIR = os.path.expanduser('~')
 
 CONFIG = join(CONFIGDIR, 'puddletag.conf')
 QT_CONFIG = join(CONFIGDIR, 'qt.conf')
 
-_data_dir = os.environ.get('XDG_DATA_HOME', os.path.join(os.path.expanduser("~"), '.local/share'))
+if platform.system() == "Windows":
+    _data_dir = os.environ.get('LOCALAPPDATA', os.path.join(os.path.expanduser("~"), 'AppData/Local'))
+    SAVEDIR = os.path.join(_data_dir, 'puddletag/data')
+else:
+    _data_dir = os.environ.get('XDG_DATA_HOME', os.path.join(os.path.expanduser("~"), '.local/share'))
+    SAVEDIR = os.path.join(_data_dir, 'puddletag')
 
-SAVEDIR = os.path.join(_data_dir, 'puddletag')
 LOG_FILENAME = os.path.join(CONFIGDIR, 'puddletag.log')
 PLUGINDIR = join(SAVEDIR, 'plugins')
 
